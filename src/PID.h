@@ -1,5 +1,7 @@
 #ifndef PID_H
 #define PID_H
+#include <iostream>
+#include <math.h>
 
 class PID {
 public:
@@ -9,6 +11,7 @@ public:
   double p_error;
   double i_error;
   double d_error;
+  double ITerm;
 
   /*
   * Coefficients
@@ -16,6 +19,7 @@ public:
   double Kp;
   double Ki;
   double Kd;
+  double Max;
 
   /*
   * Constructor
@@ -30,7 +34,7 @@ public:
   /*
   * Initialize PID.
   */
-  void Init(double Kp, double Ki, double Kd);
+  void Init(double Kp, double Ki, double Kd, double MaxIn);
 
   /*
   * Update the PID error variables given cross track error.
