@@ -35,26 +35,13 @@ int main()
   PID pid;
   // TODO: Initialize the pid variable.
   
-  // parameterization history:
-  // double init_Kp = -0.5;
-  // double init_Ki = 0;
-  // double init_Kd = 0; --> will leave track
-  
-  // double init_Kp = -0.5;
-  // double init_Ki = 0;
-  // double init_Kd = -0.5; --> will leave track
-  
-  // double init_Kp = -0.3;
-  // double init_Ki = -0.0008;
-  // double init_Kd = -1.5; --> I-error will grow almost infinitely --> Limit I-Term to avoid "wind up"
-  
   // initiate controllers for steer and throttle
   PID pid_v;
-  double init_Kp = -0.15;
-  double init_Ki = -0.008;
-  double init_Kd = -3.15;
+  double init_Kp = 0.15;
+  double init_Ki = 0;
+  double init_Kd = 3.15;
   pid.Init(init_Kp, init_Ki, init_Kd, 200);
-  pid_v.Init(-0.2, 0, 0, 0);
+  pid_v.Init(0.2, 0, 0, 0);
 
   h.onMessage([&pid, &pid_v](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -87,8 +74,8 @@ int main()
           pid.UpdateError(cte);
           pid_v.UpdateError(speed - target_velocity);
           // set new steering wheel angle and throttle
-          steer_value = pid.TotalError();
-          throttle = pid_v.TotalError();
+          steer_value = -(pid.TotalError());
+          throttle = -(pid_v.TotalError());
           
           
           // DEBUG
